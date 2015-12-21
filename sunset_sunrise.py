@@ -18,6 +18,12 @@ class SunsetSunrise(object):
     """
     def __init__(self, dt, latitude, longitude, localOffset=0, zenith=None):
         self.dt          = dt.replace(hour=0, minute=0, second=0, microsecond=0)
+        if latitude < -90 or latitude > 90:
+            raise ValueError('Invalid latitude value')
+        if longitude < -180 or longitude > 180:
+            raise ValueError('Invalid longitude value')
+        if localOffset < -12 or localOffset > 14:
+            raise ValueError('Invalid localOffset value')
         self.latitude    = latitude
         self.longitude   = longitude
         self.localOffset = localOffset
