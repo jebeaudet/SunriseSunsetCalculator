@@ -29,21 +29,6 @@ class SunriseSunset(object):
         self.localOffset = localOffset
         self.zenith      = zenith if zenith is not None else CIVIL_ZENITH
 
-    # Useful functions
-    def __adjustAngle(self, L):
-        if L < 0:
-            return L + 360
-        elif L >= 360:
-            return L - 360
-        return L
-
-    def __adjustTime(self, L):
-        if L < 0:
-            return L + 24
-        elif L >= 24:
-            return L - 24
-        return L
-
     # ALGORITHM
 
     def calculate(self):
@@ -60,13 +45,15 @@ class SunriseSunset(object):
         M_rise = (0.9856 * t_rise) - 3.289
         M_set = (0.9856 * t_set) - 3.289
 
-        # Calculate the Sun's true longitude
-        L_rise = self.__adjustAngle(M_rise + (1.916 * math.sin(math.radians(M_rise))) + (0.020 * math.sin(math.radians(2 * M_rise))) + 282.634)
-        L_set = self.__adjustAngle(M_set + (1.916 * math.sin(math.radians(M_set))) + (0.020 * math.sin(math.radians(2 * M_set))) + 282.634)
+        # Calculate the Sun's true longitude, and adjust angle to be between 0
+        # and 360
+        L_rise = (M_rise + (1.916 * math.sin(math.radians(M_rise))) + (0.020 * math.sin(math.radians(2 * M_rise))) + 282.634) % 360
+        L_set = (M_set + (1.916 * math.sin(math.radians(M_set))) + (0.020 * math.sin(math.radians(2 * M_set))) + 282.634) % 360
 
-        # Calculate the Sun's right ascension
-        RA_rise = self.__adjustAngle(math.degrees(math.atan(0.91764 * math.tan(math.radians(L_rise)))))
-        RA_set = self.__adjustAngle(math.degrees(math.atan(0.91764 * math.tan(math.radians(L_set)))))
+        # Calculate the Sun's right ascension, and adjust angle to be between 0 and
+        # 360
+        RA_rise = (math.degrees(math.atan(0.91764 * math.tan(math.radians(L_rise))))) % 360
+        RA_set = (math.degrees(math.atan(0.91764 * math.tan(math.radians(L_set))))) % 360
 
         # Right ascension value needs to be in the same quadrant as L
         Lquadrant_rise  = (math.floor(L_rise/90)) * 90
@@ -89,8 +76,12 @@ class SunriseSunset(object):
         cosDec_set = math.cos(math.asin(sinDec_set))
 
         # Calculate the Sun's local hour angle
-        cosH_rise = (math.cos(math.radians(self.zenith)) - (sinDec_rise * math.sin(math.radians(self.latitude)))) / (cosDec_rise * math.cos(math.radians(self.latitude)))
-        cosH_set = (math.cos(math.radians(self.zenith)) - (sinDec_set * math.sin(math.radians(self.latitude)))) / (cosDec_set * math.cos(math.radians(self.latitude)))
+        cos_zenith = math.cos(math.radians(self.zenith))
+        radian_lat = math.radians(self.latitude)
+        sin_latitude = math.sin(radian_lat)
+        cos_latitude = math.cos(radian_lat)
+        cosH_rise = (cos_zenith - (sinDec_rise * sin_latitude)) / (cosDec_rise * cos_latitude)
+        cosH_set = (cos_zenith - (sinDec_set * sin_latitude)) / (cosDec_set * cos_latitude)
 
         # Finish calculating H and convert into hours
         H_rise = (360 - math.degrees(math.acos(cosH_rise))) / 15
@@ -100,13 +91,13 @@ class SunriseSunset(object):
         T_rise = H_rise + RA_rise - (0.06571 * t_rise) - 6.622
         T_set = H_set + RA_set - (0.06571 * t_set) - 6.622
 
-        # Adjust back to UTC
-        UT_rise = self.__adjustTime(T_rise - lngHour)
-        UT_set = self.__adjustTime(T_set - lngHour)
+        # Adjust back to UTC, and keep the time between 0 and 24
+        UT_rise = (T_rise - lngHour) % 24
+        UT_set = (T_set - lngHour) % 24
 
         # Convert UT value to local time zone of latitude/longitude
-        localT_rise = self.__adjustTime(UT_rise + self.localOffset)
-        localT_set = self.__adjustTime(UT_set + self.localOffset)
+        localT_rise = (UT_rise + self.localOffset) % 24
+        localT_set = (UT_set + self.localOffset) % 24
 
         # Conversion
         h_rise = int(localT_rise)
