@@ -11,7 +11,7 @@ import datetime
 
 CIVIL_ZENITH = 90.83333 # civil
 
-class SunsetSunrise(object):
+class SunriseSunset(object):
     """
     This class wraps the computation for sunset and sunrise. It relies on the
     datetime class as input and output.
@@ -118,7 +118,7 @@ class SunsetSunrise(object):
         # specified
         rise_dt = self.dt.replace(hour=h_rise, minute=m_rise)
         set_dt = self.dt.replace(hour=h_set, minute=m_set)
-        return set_dt, rise_dt
+        return rise_dt, set_dt
 
 if __name__ == "__main__":
     # INPUTS
@@ -133,13 +133,11 @@ if __name__ == "__main__":
 
     right_now = datetime.datetime.now()
     # zenith is optional and defaults to the CIVIL_ZENITH value
-    rise_obj = SunsetSunrise(dt=right_now, latitude=latitude,
+    rise_obj = SunriseSunset(dt=right_now, latitude=latitude,
                              longitude=longitude, localOffset=localOffset,
                              zenith=zenith)
-    set_time, rise_time = rise_obj.calculate()
+    rise_time, set_time = rise_obj.calculate()
+
+    print "Using information for Quebec City"
     print "Sunrise", rise_time
     print "Sunset", set_time
-
-    # This is the old output format
-    # print "Sunrise : %dh%02d" % (rise.hour, rise.minute)
-    # print "Sunset : %dh%02d" % (sett.hour, sett.minute)

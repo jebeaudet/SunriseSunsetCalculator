@@ -13,18 +13,18 @@ To use, import the module and create an object like so:
 
 ```Python
 >>> import datetime
->>> import sunset_sunrise
->>> ro = sunset_sunrise.SunsetSunrise(datetime.datetime.now(), latitude=46.805,
+>>> from sunrise_sunset import SunriseSunset
+>>> ro = SunriseSunset(datetime.datetime.now(), latitude=46.805,
 longitude=-71.2316)
->>> set_time, rise_time = ro.calculate()
->>> print set_time, rise_time
-2015-12-18 20:57:00 2015-12-18 12:25:00
+>>> rise_time, set_time = ro.calculate()
+>>> print rise_time, set_time
+2015-12-18 12:25:00 2015-12-18 20:57:00
 >>> # Or you can specify the current time zone, like so
->>> ro = sunset_sunrise.SunsetSunrise(datetime.datetime.now(), latitude=46.805,
+>>> ro = SunriseSunset(datetime.datetime.now(), latitude=46.805,
 longitude=-71.2316, localOffset=-5)
->>> set_time, rise_time = ro.calculate()
->>> print set_time, rise_time
-2015-12-18 15:57:00 2015-12-18 07:25:00
+>>> rise_time, set_time = ro.calculate()
+>>> print rise_time, set_time
+2015-12-18 07:25:00 2015-12-18 15:57:00
 ```
 
 Finally, don't forget to modify the offset for the timezone. Best is to leave it at 0 to get UTC.
