@@ -31,8 +31,11 @@ class SunriseSunset(object):
 
     # ALGORITHM
 
-    def calculate(self):
+    def calculate(self, date=None):
         """Computes the sunset and sunrise for the current day, in local time"""
+        if date is None:
+            date = self.dt
+
         # Calculate the day of the year
         N = self.dt.timetuple().tm_yday
 
@@ -107,8 +110,8 @@ class SunriseSunset(object):
 
         # Create datetime objects with same date, but with hour and minute
         # specified
-        rise_dt = self.dt.replace(hour=h_rise, minute=m_rise)
-        set_dt = self.dt.replace(hour=h_set, minute=m_set)
+        rise_dt = date.replace(hour=h_rise, minute=m_rise)
+        set_dt = date.replace(hour=h_set, minute=m_set)
         return rise_dt, set_dt
 
 if __name__ == "__main__":
