@@ -28,3 +28,9 @@ longitude=-71.2316, localOffset=-5)
 ```
 
 Finally, don't forget to modify the offset for the timezone. Best is to leave it at 0 to get UTC.
+
+Python 3 support
+----------------
+
+This module is compatible with Python 2 and Python 3. It has been tested under
+python 2.7.10 and python 3.4.3+ on Ubuntu Linux

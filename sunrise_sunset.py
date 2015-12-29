@@ -6,6 +6,7 @@ location, and zenith value. Sunset and sunrise are returned for the local time
 zone.
 """
 
+from __future__ import print_function
 import math
 import datetime
 
@@ -132,6 +133,6 @@ if __name__ == "__main__":
                              zenith=zenith)
     rise_time, set_time = rise_obj.calculate()
 
-    print "Using information for Quebec City"
-    print "Sunrise", rise_time
-    print "Sunset", set_time
+    print("Using information for Quebec City")
+    print("Sunrise", rise_time)
+    print("Sunset", set_time)
