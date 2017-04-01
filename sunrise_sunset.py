@@ -116,23 +116,35 @@ class SunriseSunset(object):
         return rise_dt, set_dt
 
 if __name__ == "__main__":
+
+    import argparse
+    parser = argparse.ArgumentParser(description='Compute sunset and sunrise for a given day, location, and zenith value.')
+    parser.add_argument('latitude', metavar='LAT', type=float, help='the latitude')
+    parser.add_argument('longitude', metavar='LON', type=float, help='the longitude')
+    parser.add_argument('-d', '--date', help='a date (format: YYYY-MM-DD)')
+    parser.add_argument('-o', '--offset', type=int, help='offset from UTC')
+    args = parser.parse_args()
+
     # INPUTS
-    # Date -- uses current date
     # Longitude and latitude
-    latitude = 46.805
-    longitude = -71.2316
+    latitude = args.latitude
+    longitude = args.longitude
     # Sun's zenith for sunrise/sunset
     zenith = CIVIL_ZENITH
     # Offset from UTC (GMT)
-    localOffset = -5 # Eastern standard time
+    localOffset = args.offset if args.offset else 0
+    # date
+    date = datetime.datetime.strptime(args.date, '%Y-%m-%d') if args.date else datetime.datetime.now()
 
-    right_now = datetime.datetime.now()
-    # zenith is optional and defaults to the CIVIL_ZENITH value
-    rise_obj = SunriseSunset(dt=right_now, latitude=latitude,
+    # do the computing
+    rise_obj = SunriseSunset(dt=date, latitude=latitude,
                              longitude=longitude, localOffset=localOffset,
                              zenith=zenith)
     rise_time, set_time = rise_obj.calculate()
 
-    print("Using information for Quebec City")
+    print("Latitude: ", latitude)
+    print("Longitude: ", longitude)
+    print("Date: ", date)
+    print("Offset: ", localOffset)
     print("Sunrise", rise_time)
     print("Sunset", set_time)
