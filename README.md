@@ -33,4 +33,8 @@ Python 3 support
 ----------------
 
 This module is compatible with Python 2 and Python 3. It has been tested under
-python 2.7.10 and python 3.4.3+ on Ubuntu Linux
+python 2.7.10 and python 3.4.3+ on Ubuntu.
+
+CLI support
+----------------
+A CLI interface is also available. Type `python sunrise_sunset.py -h` for help. Required arguments are the longitude and the latitude in decimal degrees. You can optionally specify the timezone via an offset to UTC and a specific date for the calculation. 
