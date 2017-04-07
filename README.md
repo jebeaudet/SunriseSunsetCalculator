@@ -3,8 +3,8 @@ SunriseSunsetCalculator
 
 Calculate the sunset and sunrise time based on the date and the latitude/longitude.
 
-Based on the algorithm found on :
-http://williams.best.vwh.net/sunrise_sunset_algorithm.htm
+Based on the algorithm found on (archive.org page since the domain is no longer available) :
+http://web.archive.org/web/20161202180207/http://williams.best.vwh.net/sunrise_sunset_algorithm.htm
 
 To use, simply enter the necessary inputs at the beginning of the script. More info on the zenith parameter can be found here:
 http://www.timeanddate.com/worldclock/aboutastronomy.html
